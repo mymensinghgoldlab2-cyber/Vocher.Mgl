@@ -1,33 +1,34 @@
 name: Build Windows EXE
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: Install Dependencies
-      run: |
-        npm install
-        npm install electron-packager --save-dev
+      - name: Install Dependencies
+        run: npm install
 
-    - name: Build EXE
-      run: npx electron-packager . ExpenseVoucher --platform=win32 --arch=x64
+      - name: Verify package.json
+        run: type package.json
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: ExpenseVoucher-EXE
-        path: ExpenseVoucher-win32-x64
+      - name: Build Windows App
+        run: npx electron-packager . ExpenseVoucher --platform=win32 --arch=x64 --overwrite
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: ExpenseVoucher-EXE
+          path: ExpenseVoucher-win32-x64
