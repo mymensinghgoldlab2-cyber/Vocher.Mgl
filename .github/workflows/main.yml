@@ -19,16 +19,15 @@ jobs:
           node-version: 18
 
       - name: Install Dependencies
+        working-directory: VoucherApp
         run: npm install
 
-      - name: Verify package.json
-        run: type package.json
-
       - name: Build Windows App
+        working-directory: VoucherApp
         run: npx electron-packager . ExpenseVoucher --platform=win32 --arch=x64 --overwrite
 
       - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
           name: ExpenseVoucher-EXE
-          path: ExpenseVoucher-win32-x64
+          path: VoucherApp/ExpenseVoucher-win32-x64
